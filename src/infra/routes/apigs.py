@@ -7,7 +7,7 @@ from ..controllers.CodeController import CodeController
 def createApp():
     app = Flask(__name__)
     CORS(app)
-    app.config.from_object('api.conf.BaseConf')
+    app.src.config.from_object('api.conf.BaseConf')
     return app
 
 app = createApp()

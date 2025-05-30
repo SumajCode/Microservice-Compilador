@@ -1,10 +1,7 @@
 from .errors.ErrorsServer import *
 from flask import jsonify
-from ..hooks.Compiler import *
+from ...src.scripts.Compiler import *
 
-
-# def get():
-#     pass
 
 class CodeController():
     def __init__(self):
