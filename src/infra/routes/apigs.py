@@ -2,12 +2,12 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask_cors import CORS
-from ..controllers.CodeController import CodeController
+from infra.controllers.CodeController import CodeController
 
 def createApp():
     app = Flask(__name__)
     CORS(app)
-    app.src.config.from_object('api.conf.BaseConf')
+    app.config.from_object('config.conf.BaseConf')
     return app
 
 app = createApp()
@@ -29,21 +29,8 @@ def home():
     })
 
 @app.route('/compilarCodigo', methods=['POST'])
-def compilarCodigo(): 
-    """Compila el codigo fuente en base al lenguaje especificado y devuelve el resultado de la compilacion.
-
-    Parameters:
-    data (str): Codigo fuente a compilar
-    lang (str): Lenguaje en el que esta escrito el codigo
-
-    Returns:
-    dict: Diccionario con dos claves: 'status' y 'data'. La clave 'status'
-    puede tener dos valores: 'OK' o 'Error'. La clave 'data' contendra el
-    resultado de la compilacion en caso de exito o el mensaje de error en
-    caso de fallo.
-    """
-    
-    return CodeController.post(request.form.get('data'), request.form.get('lang'))
+def compilarCodigo():    
+    return CodeController().compilar(request)
 
 @app.route('/evaluarCodigo')
 def compiler():

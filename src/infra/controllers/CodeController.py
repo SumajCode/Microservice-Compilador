@@ -1,35 +1,30 @@
-from .errors.ErrorsServer import *
+from domain.errors.ErrorsServer import *
 from flask import jsonify
-from ...src.scripts.Compiler import *
-
+from scripts.Compiler import *
 
 class CodeController():
     def __init__(self):
+        self.compilador = Compilador()
+
+    def compilar(self, request):
+        resultado = self.compilador.Compilar(request)
+        if 'error' not in str(resultado['result']).lower():
+            return jsonify({
+                'data': resultado,
+                'message' : 'Compilado con exito. xd',
+                'status' : 'OK',
+                'code':200
+            })
+        return jsonify({
+            'data': resultado['result'],
+            'message' : 'Error al compilar creo que no sirves para programar :v',
+            'status' : 'Error',
+            'code':200
+        })
+
+    def evaluar(self, codigo: str, lenguaje: str):
+
         pass
-    
-    def post(self, codigo: str, lenguaje: str):
-        """
-        Realiza la compilacion de un codigo fuente en base a lenguaje
-        especificado y devuelve el resultado de la compilacion.
 
-        Parameters:
-        codigo (str): Codigo fuente a compilar
-        lenguaje (str): Lenguaje en el que esta escrito el codigo
-        """
-       
-        resultado = Compilador.Compilar(codigo, lenguaje)
-        if resultado.get('status') == 'OK':
-            return jsonify({
-                'data': resultado.get('data'),
-                'message' : 'OK',
-                'status' : 200
-            })
-        else:
-            return jsonify({
-                'data': resultado.get('data'),
-                'message' : 'Error',
-                'status' : 500
-            })
-
-# def put():
-#     pass
+    # def put():
+    #     pass

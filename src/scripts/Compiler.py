@@ -1,41 +1,34 @@
 import traceback
 import sys
+import io
+from features.sandbox.SandBoxCompilerOnlyPython import SandBox
 
-class Compilador:
+class Compilador(SandBox):
     def __init__(self):
-        pass
+        super().__init__()
 
-    def Compilar(self, codigo: str, lenguaje: str):
-        """
-        Compila el codigo fuente en base al lenguaje especificado y devuelve
-        el resultado de la compilacion.
-
-        Parameters:
-        codigo (str): Codigo fuente a compilar
-        lenguaje (str): Lenguaje en el que esta escrito el codigo
-
-        Returns:
-        dict: Diccionario con dos claves: 'status' y 'data'. La clave 'status'
-        puede tener dos valores: 'OK' o 'Error'. La clave 'data' contendra el
-        resultado de la compilacion en caso de exito o el mensaje de error en
-        caso de fallo.
-        """
-        resultado = {'status': None, 'data': None}
-        if lenguaje == "python":
-            try:
-                resultado['status'] = 'OK'
-                resultado['data'] = exec(compile(codigo, '<String>', 'exec'))
-                return resultado
-            except Exception:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                resultado['status'] = 'Error'
-                resultado['data'] = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-                return resultado
-        # else:
-        #     pass
-
-    def CompilarConArgumentos(self, codigo: str, lenguaje: str, argumentos: list):
-        pass
-
-    def CompilarConArgumentosYEntrada(self, codigo: str, lenguaje: str, argumentos: list, entrada: list):
-        pass
+    def Compilar(self, request):
+        try:
+            datos = request.get_json() if request.is_json else request.form
+            if 'lang' in datos.keys() and 'code' in datos.keys():
+                if datos['lang'] == "python":
+                    try:
+                        salida = sys.stdout
+                        capturaDeSalida = io.StringIO()
+                        sys.stdout = capturaDeSalida
+                        exec(compile(datos['code'], '<String>', 'exec'))
+                        resultado = capturaDeSalida.getvalue().strip()
+                        sys.stdout = salida
+                        return {
+                            'result':resultado if resultado is not None else "No se tiene salida de la compilacion.",
+                            'tiempoEjecucion':self.tiempoEjecucion(datos['code']),
+                            'memoriaUso': self.accederMemoria(datos['code'])
+                        }
+                    except:
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        return {'result':''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))}
+                # else:
+                #     pass
+            return ""
+        except Exception as e:
+            return f"Error encontrado: {e}"
