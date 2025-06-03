@@ -1,38 +1,33 @@
-from .errors.ErrorsServer import *
-from flask import jsonify
-from ..hooks.Compiler import *
+from domain.errors.ErrorsServer import *
+from features.sandbox.SandBoxCompilerOnlyPython import SandBox
+from features.controllers.Controller import Controller
 
-
-# def get():
-#     pass
-
-class CodeController():
+class CodeController(Controller):
     def __init__(self):
+        super().__init__()
+        self.sandobox = SandBox(None)
+
+    def compilar(self, request):
+        datos = self.obtenerRequest(request)
+        self.sandobox.lenguaje = datos['lang']
+        self.sandobox.compilar(datos)
+        if 'error' not in str(self.sandobox.salida['result']).lower():
+            return self.response({
+                'data': self.sandobox.salida,
+                'message' : 'A no mame si sabe programar xd.',
+                'status' : 'OK',
+                'code':200
+            })
+        return self.response({
+            'data': self.sandobox.salida,
+            'message' : 'Error al compilar creo que no sirves para programar :v.',
+            'status' : 'Error',
+            'code':200
+        })
+
+    def evaluar(self, codigo: str, lenguaje: str):
+
         pass
-    
-    def post(self, codigo: str, lenguaje: str):
-        """
-        Realiza la compilacion de un codigo fuente en base a lenguaje
-        especificado y devuelve el resultado de la compilacion.
 
-        Parameters:
-        codigo (str): Codigo fuente a compilar
-        lenguaje (str): Lenguaje en el que esta escrito el codigo
-        """
-       
-        resultado = Compilador.Compilar(codigo, lenguaje)
-        if resultado.get('status') == 'OK':
-            return jsonify({
-                'data': resultado.get('data'),
-                'message' : 'OK',
-                'status' : 200
-            })
-        else:
-            return jsonify({
-                'data': resultado.get('data'),
-                'message' : 'Error',
-                'status' : 500
-            })
-
-# def put():
-#     pass
+    # def put():
+    #     pass
