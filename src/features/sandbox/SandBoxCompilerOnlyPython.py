@@ -35,7 +35,7 @@ class SandBox(AssertCode):
                 subprocess.Popen([])
         return self
 
-    def evaluarUnicaFuncion(self, datos: dict):
+    def evaluar(self, datos: dict):
         """
         Evalua una funcion unica en el codigo.
 

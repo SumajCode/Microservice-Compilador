@@ -8,6 +8,31 @@ class CodeController(Controller):
         self.sandbox = SandBox(None)
 
     def compilar(self, request):
+        """
+        Compila el código segun el lenguaje y la entrada de datos.
+
+        Recibe una solicitud HTTP con los datos necesarios para la compilación,
+        incluyendo el código, el lenguaje de programación y las entradas y salidas
+        esperadas. El método configura el lenguaje y las entradas/salidas en el
+        objeto sandbox y luego llama al método `compilar` de sandbox para
+        realizar la compilación del código. Si el resultado no contiene errores,
+        devuelve una respuesta indicando éxito; de lo contrario, devuelve un
+        mensaje de error.
+
+        Parameters
+        ----------
+        request : Request
+            La solicitud HTTP que contiene los datos necesarios para la
+            compilación, incluyendo el código, el lenguaje de programación y las
+            entradas y salidas esperadas.
+
+        Returns
+        -------
+        Response
+            Un objeto de respuesta que contiene el resultado de la compilación
+            del código, un mensaje de éxito o error, el estado y el código de
+            respuesta.
+        """
         datos = self.obtenerRequest(request)
         self.sandbox.lenguaje = datos['lang']
         self.sandbox.compilar(datos)
@@ -26,6 +51,30 @@ class CodeController(Controller):
         })
 
     def evaluar(self, request):
+        """
+        Evalúa el código recibido en la solicitud según las entradas y salidas
+        proporcionadas.
+
+        El método configura el lenguaje y las entradas/salidas en el objeto
+        sandbox y luego llama al método `evaluar` de sandbox para realizar la
+        evaluación del código. Si el resultado no contiene errores, devuelve
+        una respuesta indicando éxito; de lo contrario, devuelve un mensaje
+        de error.
+
+        Parameters
+        ----------
+        request : Request
+            La solicitud HTTP que contiene los datos necesarios para la evaluación,
+            incluyendo el código, el lenguaje de programación, las entradas y las
+            salidas esperadas.
+
+        Returns
+        -------
+        Response
+            Un objeto de respuesta que contiene el resultado de la evaluación del
+            código, un mensaje de éxito o error, el estado y el código de respuesta.
+        """
+
         datos =  self.obtenerRequest(request)
         self.sandbox.lenguaje = datos['lang']
         self.sandbox.salidas = datos['outputs']

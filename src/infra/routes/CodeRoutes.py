@@ -6,10 +6,10 @@ from infra.controllers.CodeController import CodeController
 compilador = CodeController()
 blueprint = Blueprint('code', __name__, url_prefix='/code')
 
-@blueprint.route('/compilar', methods=['GET'])
+@blueprint.route('/compilar', methods=['GET', 'POST'])
 def compilarCodigo():
     return compilador.compilar(request)
 
-@blueprint.route('/evaluar', methods=['GET'])
+@blueprint.route('/evaluar', methods=['GET', 'POST'])
 def evaluarCodigo():
     return compilador.evaluar(request)

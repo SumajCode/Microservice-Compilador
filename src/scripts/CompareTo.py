@@ -55,9 +55,10 @@ def compararCodigo(codigos: list, restricciones: list):
                 return True, f"No se encuentra en el codigo: {codigos[i]}"
             i += 1
         i = 0
+
         for string in codigos:
-            if codigos.count(string) == 1:
+            if len(codigos) == 1:
                 break
-            if string in restricciones:
+            if str(string).lower() in tempRestricciones:
                 codigos.remove(string)
     return False, codigos

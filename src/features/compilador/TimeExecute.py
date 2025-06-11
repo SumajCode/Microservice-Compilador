@@ -1,6 +1,5 @@
 import time
 from functools import wraps
-# * Usar decorador
 def tiempoEjecucion():
     def calcularTiempo(funct):
         """
@@ -9,6 +8,19 @@ def tiempoEjecucion():
         """
         @wraps(funct)
         def wrapper(self, *args, **kwargs):
+            """
+            Wrapper que mide el tiempo de ejecuccion de la compilacion y
+            actualiza el resultado con el tiempo de ejecuccion.
+
+            Par metros:
+            self (object): El objeto que contiene la compilaci n.
+            *args (tuple): Argumentos de la compilaci n.
+            **kwargs (dict): Argumentos de la compilaci n.
+
+            Retorna:
+            compilacion (Compilador): El objeto de compilaci n con el resultado actualizado.
+            """
+
             tiempoIni = time.time()
             compilacion = funct(self, *args, **kwargs)
             tiempoFin = time.time()
