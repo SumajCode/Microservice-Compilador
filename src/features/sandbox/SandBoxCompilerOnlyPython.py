@@ -4,6 +4,7 @@ from features.compilador.TimeExecute import tiempoEjecucion
 from features.compilador.MemoryAccess import accederMemoria
 from features.compilador.GetOutputCode import salidaCodigo
 from features.compilador.AssertCode import AssertCode
+from features.compilador.TaskCode import identificarCodigoEnCodigo
 # from compilador.DebbuggerCode import 
 # from compilador.MemoryStructure import 
 
@@ -53,24 +54,27 @@ class SandBox(AssertCode):
             results = []
             self.entradas = datos['inputs']
             self.salidas = datos['outputs']
-            self.code = datos['code']
+            self.functionInvoke = datos['functionInvoke']
+
+            self.todoDelCodigio = identificarCodigoEnCodigo(datos['code'], datos['rules'])
+            if isinstance(self.todoDelCodigio, tuple):
+                self.salida['result'] = f"{self.todoDelCodigio[0]}:\n{self.todoDelCodigio[1]}"
+                return None
+            
             if self.lenguaje == 'python':
                 if len(self.entradas) == len(self.salidas):
-                    for i in range(self.entradas):
-                        results.append(
-                            super().Evaluar({
-                                'code':self.code,
-                                'input': self.entradas[i], 
-                                'output': self.salidas[i]}))
+                    for i in range(len(self.entradas)):
+                        self.input = self.entradas[i]
+                        self.output = self.salidas[i]
+                        super().Evaluar(datos['code'])
+                        results.append(self.salida)
+                        self.salida = {
+                            'result':None,
+                            'tiempoEjecucion':None,
+                            'memoriaUso': None
+                        }
                     self.salida = results
-                    return self
-                return None
+                    return self.salida
             elif isinstance(datos['code'], __file__):
                 subprocess.Popen([])
         return self
-    
-    def debugg(self):
-        pass
-
-    def estrucMemoria(self):
-        pass
