@@ -1,33 +1,15 @@
 from features.compilador.TaskCode import identificarCodigoEnCodigo
 
-print(identificarCodigoEnCodigo("""
-import random
-class prueba:
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
+print(identificarCodigoEnCodigo("""def suma(a:int, b: int=3):
+    return a+b
 """, {
     'imports': None,
     'functions':{
-        'functionNames':['prueba'],
-        'functionsCode':["""
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
-"""]
+        'functionNames':None,
+        'functionsCode':None
     },
     'classes':{
-        'classNames':['prueba'],
-        'classesCode':["""
-class prueba:
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
-    def prueba(maxnumero: int):
-        return f\"Prueba de random {random.randint(0, maxnumero)}\"
-"""]
+        'classNames':None,
+        'classesCode':None
     }
 }))

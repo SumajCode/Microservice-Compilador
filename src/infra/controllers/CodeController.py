@@ -36,15 +36,17 @@ class CodeController(Controller):
         datos = self.obtenerRequest(request)
         self.sandbox.lenguaje = datos['lang']
         self.sandbox.compilar(datos)
+        salida = self.sandbox.salida
+        self.sandbox = SandBox(datos['lang'])
         if 'error' not in str(self.sandbox.salida['result']).lower():
             return self.response({
-                'data': self.sandbox.salida,
+                'data': salida,
                 'message' : 'A no mame si sabe programar xd.',
                 'status' : 'OK',
                 'code':200
             })
         return self.response({
-            'data': self.sandbox.salida,
+            'data': salida,
             'message' : 'Error al compilar creo que no sirves para programar :v.',
             'status' : 'Error',
             'code':200
@@ -74,26 +76,26 @@ class CodeController(Controller):
             Un objeto de respuesta que contiene el resultado de la evaluación del
             código, un mensaje de éxito o error, el estado y el código de respuesta.
         """
-
         datos =  self.obtenerRequest(request)
         self.sandbox.lenguaje = datos['lang']
-        self.sandbox.salidas = datos['outputs']
+        self.sandbox.salidas = datos['outputs'] 
         self.sandbox.entradas = datos['inputs']
         if datos['lang'] is not None and datos['outputs'] is not None and datos['inputs'] is not None:
             self.sandbox.evaluar(datos)
-            if 'error' not in str(self.sandbox.salida['result']).lower():
-                return self.response({
-                    'data': self.sandbox.salida,
-                    'message' : 'A no mame si sabe programar xd.',
-                    'status' : 'OK',
-                    'code':200
-                })
-        return self.response({
-            'data': self.sandbox.salida,
-            'message' : 'Error al compilar creo que no sirves para programar :v.',
-            'status' : 'Error',
-            'code':200
-        })
-
-    # def put():
-    #     pas
+            salida = self.sandbox.salida
+            self.sandbox = SandBox(datos['lang'])
+            return self.response({
+                'data': salida,
+                'message' : 'Resultados de la evaluacion.',
+                'status' : 'OK',
+                'code':200
+            })
+        # try:
+            
+        # except Exception as e:
+        #     return self.response({
+        #         'data': [],
+        #         'message' : f"Hubo un error con los datos: {e}.",
+        #         'status' : 'Error',
+        #         'code':200
+        #     })
