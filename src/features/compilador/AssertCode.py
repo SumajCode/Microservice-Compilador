@@ -15,7 +15,7 @@ class AssertCode(Compilador):
     @evaluarSalidaCodigo()
     @tiempoEjecucion()
     @accederMemoria()
-    def Evaluar(self, codigo: str):
+    def Evaluar(self, codigo: str, **kwargs):
         """
         Evalua el codigo segun las entradas y salidas definidas en el diccionario de datos.
         
@@ -35,5 +35,6 @@ class AssertCode(Compilador):
         """
         if self.todoDelCodigio:
             self.code = agregarCodigo(codigo, self.input, self.todoDelCodigio, self.functionInvoke)
+            self.output = kwargs.get('output')
             self.Compilar(output=self.output)
             return self

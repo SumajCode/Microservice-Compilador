@@ -21,19 +21,6 @@ def evaluarSalidaCodigo():
         """
         @wraps(funct)
         def wrapper(self, *args, **kwargs):
-            """
-            Wrapper que captura la salida estandar de la compilacion y la 
-            almacena en la clave 'result' del diccionario de salida del 
-            objeto de compilacion.
-
-            Parámetros:
-            self (object): El objeto que contiene la compilación.
-            *args (tuple): Argumentos de la compilación.
-            **kwargs (dict): Argumentos de la compilación.
-
-            Retorna:
-            compilacion (Compilador): El objeto de compilación con el resultado actualizado.
-            """
             salida = sys.stdout
             capturaDeSalida = io.StringIO()
             sys.stdout = capturaDeSalida

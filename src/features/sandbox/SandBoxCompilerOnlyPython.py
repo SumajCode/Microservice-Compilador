@@ -37,19 +37,6 @@ class SandBox(AssertCode):
         return self
 
     def evaluar(self, datos: dict):
-        """
-        Evalua una funcion unica en el codigo.
-
-        El metodo evalua una funcion en el codigo segun las entradas y salidas
-        definidas en el diccionario de datos. Si el lenguaje es python, se utiliza
-        el compilador de python, si no es asi, se utiliza el compilador del lenguaje
-        especificado.
-
-        :param datos: Diccionario que contiene el codigo a evaluar, el lenguaje
-                      y las entradas y salidas.
-
-        :return: El objeto de compilacion con los resultados de la evaluacion.
-        """
         if 'lang' in datos.keys() and 'code' in datos.keys():
             results = []
             self.entradas = datos['inputs']
@@ -66,7 +53,7 @@ class SandBox(AssertCode):
                     for i in range(len(self.entradas)):
                         self.input = self.entradas[i]
                         self.output = self.salidas[i]
-                        super().Evaluar(datos['code'])
+                        super().Evaluar(datos['code'], output=self.output)
                         results.append(self.salida)
                         self.salida = {
                             'result':None,
