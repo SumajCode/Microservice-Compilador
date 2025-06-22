@@ -32,49 +32,53 @@ def identificarCodigoEnCodigo(code: str, restricciones: dict):
     """
     code = code.lower()
     funcionesCodigo = encontrarFunciones(code)
-    clasesCodigo = encontrarClases(code)
+    # clasesCodigo = encontrarClases(code)
 
     importaciones = None
-    clases = None
+    # clases = None
     funciones = None
 
-    restriccionesClases = None
+    # restriccionesClases = None
     restriccionesFunciones = None
 
     keys = restricciones.keys()
 
     if 'imports' in keys and restricciones['imports']:
         importaciones = [str(importacion).lower().strip() for importacion in restricciones['imports']]
-    if 'functions' in keys and restricciones['functions']['functionNames'] and restricciones['functions']['functionsCode']:
-        funciones = [str(funcion).lower().strip() for funcion in restricciones['functions']['functionNames']]
-        restriccionesFunciones = [str(name).lower().strip() for name in restricciones['functions']['functionsCode']]
-    if 'classes' in keys and restricciones['classes']['classNames'] and restricciones['classes']['classesCode']:
-        clases = [str(clase).lower().strip() for clase in restricciones['classes']['classNames']]
-        restriccionesClases = [str(name).lower().strip() for name in restricciones['classes']['classesCode']]
+    if 'functions' in keys:
+        functionsRules = restricciones['functions']
+        keysFuncitons = functionsRules.keys()
+        if 'functionNames' in keysFuncitons and functionsRules['functionNames'] is not None:
+            funciones = [str(funcion).lower().strip() for funcion in restricciones['functions']['functionNames']]
+        if 'functionCodes' in keysFuncitons and functionsRules['functionCodes'] is not None:
+            restriccionesFunciones = [str(name).lower().strip() for name in restricciones['functions']['functionsCode']]
+    # if 'classes' in keys and restricciones['classes']['classNames'] and restricciones['classes']['classesCode']:
+    #     clases = [str(clase).lower().strip() for clase in restricciones['classes']['classNames']]
+    #     restriccionesClases = [str(name).lower().strip() for name in restricciones['classes']['classesCode']]
     
     importacionesCodigo = [importacion for importacion in encontrarImports(code)]
     nombreFuncionesCodigo = funcionesCodigo['functionNames']
-    nombreClasesCodigo = clasesCodigo['classNames']
+    # nombreClasesCodigo = clasesCodigo['classNames']
 
     compararImportaciones, importacion = compararArreglos(
         importacionesCodigo if len(importacionesCodigo) > 0 else None,
         importaciones
     )
     
-    compararClases, mensajeClases = compararCodigo(
-        nombreClasesCodigo if len(nombreClasesCodigo) > 0 else None,
-        clases
-    )
+    # compararClases, mensajeClases = compararCodigo(
+    #     nombreClasesCodigo if len(nombreClasesCodigo) > 0 else None,
+    #     clases
+    # )
     
     compararFunciones, mensajeFunciones = compararCodigo(
         nombreFuncionesCodigo if len(nombreFuncionesCodigo) > 0 else None,
         funciones
     )
 
-    cambioDeCodigoClases, clasesDeCodigo = compararCodigo(
-        clasesCodigo['classes'],
-        restriccionesClases
-    )
+    # cambioDeCodigoClases, clasesDeCodigo = compararCodigo(
+    #     clasesCodigo['classes'],
+    #     restriccionesClases
+    # )
     
     cambioDeCodigoFunciones, funcionesDeCodigo = compararCodigo(
         funcionesCodigo['functions'],
@@ -83,13 +87,13 @@ def identificarCodigoEnCodigo(code: str, restricciones: dict):
     
     if compararImportaciones:
         return "Error tiene importaciones no permitidas.", importacion
-    if compararClases is False or compararFunciones is False:
-        if cambioDeCodigoClases:
-            return "Error cambio la clase obligatoria.", clasesDeCodigo
+    if compararFunciones is False:
+        # if cambioDeCodigoClases:
+        #     return "Error cambio la clase obligatoria.", clasesDeCodigo
         if cambioDeCodigoFunciones:
             return "Error cambio la funcion obligatoria.", funcionesDeCodigo
         return {
-            'clases': mensajeClases,
+            # 'clases': mensajeClases,
             'funciones': mensajeFunciones
         }
     return None

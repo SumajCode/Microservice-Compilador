@@ -1,18 +1,21 @@
 from domain.code.CompilerCode import Compilador
 from features.compilador.TimeExecute import tiempoEjecucion
 from features.compilador.MemoryAccess import accederMemoria
-from features.compilador.GetOutputCode import salidaCodigo
-from features.compilador.TaskCode import identificarCodigoEnCodigo
+from features.compilador.AssertOutputCode import evaluarSalidaCodigo
 from scripts.FormaterString import agregarCodigo
 
 class AssertCode(Compilador):
     def __init__(self):
+        self.todoDelCodigio = None
+        self.functionInvoke = ""
+        self.input = None
+        self.output = None
         super().__init__()
 
-    @salidaCodigo()
+    @evaluarSalidaCodigo()
     @tiempoEjecucion()
     @accederMemoria()
-    def Evaluar(self, datos: dict):
+    def Evaluar(self, codigo: str, **kwargs):
         """
         Evalua el codigo segun las entradas y salidas definidas en el diccionario de datos.
         
@@ -30,13 +33,8 @@ class AssertCode(Compilador):
         dict
             El objeto de compilacion con los resultados de la evaluacion.
         """
-        todoDelCodigio = identificarCodigoEnCodigo(datos['code'], datos['rules'])
-        if isinstance(todoDelCodigio, tuple):
-            self.salida['result'] = f"{todoDelCodigio[0]}:\n{todoDelCodigio[1]}"
-            return self.salida
-        nuevoCodigo = agregarCodigo(datos['code'], datos['input'], todoDelCodigio)
-        self.code = nuevoCodigo
-        self.Compilar()
-        if self.salida['result'] != datos['output'] :
-            self.salida['result'] = f"Error: {self.salida['result']} != {str(datos['output'])}"
-        return self.salida
+        if self.todoDelCodigio:
+            self.code = agregarCodigo(codigo, self.input, self.todoDelCodigio, self.functionInvoke)
+            self.output = kwargs.get('output')
+            self.Compilar(output=self.output)
+            return self
