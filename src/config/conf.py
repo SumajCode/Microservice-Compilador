@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class BaseConf():
-    def get_bool_env(var_name, default=False):
+    def getBoolEnv(var_name, default=False):
         val = os.getenv(var_name, str(default))
         return val.lower() in ('true', '1', 't', 'yes', 'y')
     
@@ -13,15 +13,16 @@ class BaseConf():
     HOST = os.getenv("HOST")
     PORT_API = os.getenv("PORT_API")
     SECRET_KEY = os.getenv("SECRET_KEY")
-    DEBUG = get_bool_env("DEBUG")
-    TESTING = get_bool_env("TESTING")
+    DEBUG = getBoolEnv("DEBUG")
+    TESTING = getBoolEnv("TESTING")
+    ENV_DEV = getBoolEnv("ENV_DEV")
 
     MONGODB_USER = os.getenv("MONGODB_USER")
     MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
     MONGODB_HOST = os.getenv("MONGODB_HOST")
     MONGODB_PORT = os.getenv("MONGODB_PORT")
     MONGODB_DB = os.getenv("MONGODB_DB")
-    MONGODB_ACTIVE = get_bool_env("MONGODB_ACTIVE")
+    MONGODB_ACTIVE = getBoolEnv("MONGODB_ACTIVE")
 
     # SMTP_HOST = os.getenv("SMTP_HOST")
     # SMTP_PORT = os.getenv("SMTP_PORT")
