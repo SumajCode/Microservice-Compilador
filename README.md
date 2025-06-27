@@ -1,198 +1,204 @@
-﻿# GeneracionSoftware
-# Flask Microservice API
+﻿# Compiler Microservice
 
-Este proyecto es una API microservicio desarrollada con Flask, diseñada para proporcionar una estructura modular y fácil de mantener para el desarrollo de aplicaciones web.
+Microservicio RESTful desarrollado en Flask para la compilación y evaluación de código fuente. Permite enviar código y entradas para su ejecución segura en un entorno sandbox, soportando principalmente Python.
 
-## Estructura del Proyecto
+---
+
+## 🚀 Características
+
+- Compilación y evaluación de código fuente vía API
+- Arquitectura modular y escalable
+- Sandbox para ejecución segura
+- Controladores y rutas desacopladas
+- Configuración por variables de entorno
+- Migraciones automáticas de base de datos (si aplica)
+- Entorno virtual recomendado
+
+---
+
+## 📁 Estructura del Proyecto
 
 ```
-APIMicroservice/
-├── .venv/                     # Entorno virtual
-├── api/                       # Directorio principal de la aplicación
-│   ├── controllers/           # Controladores de rutas
-│   ├── hooks/                 # Middleware y hooks
-│   ├── db/                    # Módulos de base de datos
-│   │   ├── conn.py            # Configuración de conexión a DB
-│   │   ├── orm.py             # ORM para modelos
-│   │   └── execute.py         # Funciones para ejecutar consultas
-│   ├── docs/                  # Documentación de la API
-│   ├── models/                # Modelos de datos
-│   ├── test/                  # Pruebas unitarias y de integración
-│   ├── apigs.py               # Punto de entrada principal
-│   ├── conf.py                # Archivo de configuración
-│   ├── init.py                # Inicialización del paquete
-│   └── requirements.txt       # Dependencias del proyecto
+compiler/
+├── README.md
+├── __init__.py
+├── src/
+│   ├── main.py
+│   ├── config/
+│   ├── domain/
+│   ├── features/
+│   │   └── sandbox/
+│   │       └── SandBoxCompilerOnlyPython.py
+│   ├── hooks/
+│   ├── infra/
+│   │   ├── controllers/
+│   │   │   └── CodeController.py
+│   │   └── routes/
+│   │       ├── apigs.py
+│   │       └── CodeRoutes.py
+│   ├── scripts/
+│   └── shared/
+├── requirements.txt
+└── .env
 ```
 
-## Archivo de Configuración
+---
 
-El proyecto utiliza un archivo de configuración (`conf.py`) que contiene todas las variables necesarias para el funcionamiento de la aplicación. La configuración se maneja a través de una clase `BaseConf`:
+## ⚙️ Instalación y Configuración
 
-```python
-# conf.py
-class BaseConf():
-    APP_NAME = "YalaSoft XD"
-    SECRET_KEY = ""
-    DEBUG = True
-    TESTING = False
-
-    # Configuración de PostgreSQL
-    POSTGRES_USER = ""
-    POSTGRES_PASSWORD = ""
-    POSTGRES_HOST = ""
-    POSTGRES_PORT = ""
-    POSTGRES_DB = ""
-    POSTGRES_ACTIVE = False
-
-    # Configuración de SQL Server
-    SQL_USER = ""
-    SQL_PASSWORD = ""
-    SQL_HOST = ""
-    SQL_PORT = ""
-    SQL_DB = ""
-    SQL_ACTIVE = False
-
-    # Configuración SMTP
-    SMTP_HOST = ""
-    SMTP_PORT = ""
-    SMTP_USER = ""
-    SMTP_PASSWORD = ""
-
-    # Otros servicios
-    GOOGLE_AUTENTICATION_CLIENT_ID = ""
-    GOOGLE_AUTHENTICATION_CLIENT_SECRET = ""
-    CODE_COMPILATOR_CLIENT_ID = ""
-    CODE_COMPILATOR_CLIENT_SECRET = ""
-    CODE_IA_CLIENT_ID = ""
-    CODE_IA_CLIENT_SECRET = ""
-```
-
-## Inicialización de la Aplicación
-
-La aplicación se inicializa a través del archivo `apigs.py`, que crea la instancia de Flask y carga la configuración:
-
-```python
-# apigs.py
-from flask import Flask
-
-def create_app():
-    app = Flask(__name__)
-    app.src.config.from_object('api.conf.BaseConf')
-    return app
-
-app = create_app()
-
-@app.route('/')
-def home():
-    return "hola"
-
-if __name__ == '__main__':
-    app.run(debug=True)
-```
-
-## Comandos para el Desarrollo
-
-### Configuración Inicial
+### 1. Clona el repositorio y navega al directorio del proyecto
 
 ```bash
-# Crear un entorno virtual
-python -m venv .venv
+git clone https://github.com/SumajCode/Microservice-Compilador.git
+cd /Microservice-Compiler
+```
 
-# Activar el entorno virtual (Windows)
-.venv\Scripts\activate
+### 2. Crea y activa un entorno virtual
 
-# Activar el entorno virtual (Linux/Mac)
-source .venv/bin/activate
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
 
-# Instalar dependencias
+# Linux/MacOS
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Instala las dependencias
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Ejecutar la Aplicación en Modo Debug
+### 4. Configura las variables de entorno
+
+Crea un archivo `.env` en la raíz de `compiler/` con, por ejemplo:
+
+```env
+FLASK_APP=src/main.py
+FLASK_DEBUG=1
+APP_NAME=CompilerMicroservice
+APP_VERSION=1.0.0
+HOST=localhost
+PORT_API=4005
+```
+
+---
+
+## 🏃‍♂️ Ejecución del Servidor
+
+Todos los comandos deben ejecutarse desde el directorio `src`:
 
 ```bash
-# Desde la raíz del proyecto
-python -m api.apigs
-
-# O directamente si estás en el directorio api
-python apigs.py
+cd src
+flask run
 ```
 
-### Variables de Entorno (opcional)
+La aplicación estará disponible en: [http://localhost:4005](http://localhost:4005) (o el puerto configurado).
 
-Para mayor seguridad, puedes establecer variables de entorno para valores sensibles:
+---
+
+## 🛣️ Visualizar Rutas Disponibles
 
 ```bash
-# Windows (PowerShell)
-$env:SECRET_KEY="tu-clave-secreta"
-$env:POSTGRES_USER="usuario-db"
-
-# Linux/Mac
-export SECRET_KEY="tu-clave-secreta"
-export POSTGRES_USER="usuario-db"
+cd src
+flask routes
 ```
 
-### Pruebas
+---
 
-```bash
-# Ejecutar todas las pruebas
-python -m unittest discover -s api/test
+## 📦 Dependencias Principales
 
-# Ejecutar una prueba específica
-python -m unittest api.test.test_nombre
-```
+- Flask
+- Flask-CORS
+- python-dotenv
+- (y otras listadas en `requirements.txt`)
 
-## Acceso a Variables de Configuración
+---
 
-Puedes acceder a las variables de configuración dentro de tus rutas y funciones a través del objeto `app.config`:
+## 🧩 Ejemplo de Código
+
+### main.py
 
 ```python
-@app.route('/config-info')
-def config_info():
-    return {
-        'app_name': app.config['APP_NAME'],
-        'debug_mode': app.config['DEBUG']
-    }
+from infra.routes.apigs import createApp
+
+application = createApp()
+
+if __name__ == '__main__':
+    application.run()
 ```
 
-## Personalización de la Configuración
+### apigs.py
 
-Para utilizar diferentes configuraciones según el entorno (desarrollo, pruebas, producción), puedes:
-
-1. Crear clases adicionales que hereden de `BaseConf`:
 ```python
-class DevConfig(BaseConf):
-    DEBUG = True
+from flask import Flask, Blueprint, jsonify
+from flask_cors import CORS
+from infra.routes.CodeRoutes import blueprint as blueCode
 
-class ProdConfig(BaseConf):
-    DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+def createApp():
+    app = Flask(__name__)
+    CORS(app)
+    app.config.from_object('config.conf.BaseConf')
+    padreBlueprint = Blueprint('apicompilador', __name__, url_prefix='/apicompilador/v1')
+    # ...rutas y blueprints...
+    app.register_blueprint(padreBlueprint)
+    return app
 ```
 
-2. Cargar la configuración según una variable de entorno:
-```python
-config_class = {
-    'development': 'api.conf.DevConfig',
-    'production': 'api.conf.ProdConfig'
-}.get(os.environ.get('FLASK_ENV', 'development'))
+---
 
-app.src.config.from_object(config_class)
+## 📚 Endpoints Principales
+
+### Código
+
+- `POST /apicompilador/v1/code/compilar` — Compila y ejecuta código fuente
+- `POST /apicompilador/v1/code/evaluar` — Evalúa código fuente con pruebas con un solo argumento
+
+#### Ejemplo de request para `/code/compilar`:
+
+```json
+POST /apicompilador/v1/code/compilar
+Content-Type: application/json
+
+{
+  "lang": "python",
+  "code": "print('Hola mundo')"
+}
 ```
 
-## Extensiones Útiles para Flask
+#### Ejemplo de request para `/code/evaluar`:
 
-- **Flask-RESTful**: Para crear APIs RESTful
-- **Flask-SQLAlchemy**: ORM para simplificar el acceso a bases de datos
-- **Flask-Migrate**: Para migraciones de base de datos
-- **Flask-JWT-Extended**: Para autenticación con tokens JWT
-- **Flask-Cors**: Para manejar CORS (Cross-Origin Resource Sharing)
+```json
+POST /apicompilador/v1/code/evaluar
+Content-Type: application/json
 
-## Problemas Comunes
+{
+  "code":"\ndef suma(a:int, b: int=3):\n  return a+b",
+  "lang":"python",
+  "outputs":[5,4,8],
+  "inputs":[2,2,5],
+  "rules":{
+        "functions":{
+            "functionNames":["suma"]
+        }
+    },
+  "functionInvoke":"suma"
+}
+```
 
-- **Error de importación**: Asegúrate de que el módulo esté en el `sys.path` de Python
-- **Error de configuración**: Verifica la ruta correcta al importar objetos de configuración
-- **Variables no disponibles**: Confirma que la configuración se ha cargado correctamente
+---
 
-## Contribución
+## 📝 Notas
 
-Las contribuciones son bienvenidas. Por favor, asegúrate de seguir las prácticas de código limpio y añadir pruebas para cualquier nueva funcionalidad.
+- Siempre activa el entorno virtual antes de instalar dependencias o ejecutar la aplicación.
+- Usa variables de entorno para evitar exponer información sensible.
+- El archivo de configuración `conf.py` centraliza la lectura de variables de entorno.
+- El endpoint `/code/compilar` ejecuta el código en un entorno sandbox para mayor seguridad.
+
+---
+
+## 🤝 Contribuciones
+
+¡Las contribuciones son bienvenidas! Por favor, abre un issue o un pull request para sugerencias o mejoras.
