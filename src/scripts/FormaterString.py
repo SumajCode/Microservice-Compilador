@@ -30,3 +30,30 @@ def formatoParametro(param):
     if isinstance(param, str):
         return str(param)
     return None
+
+def formatErrorsValidate(mainErrors):
+    """
+    Formats validation errors into a single string.
+
+    This function takes a dictionary of validation errors, where each key
+    is a field name and each value is a list of error messages. It compiles 
+    these errors into a single string where each error is represented as 
+    "field:error" and errors are separated by commas.
+
+    Parameters
+    ----------
+    mainErrors : dict
+        A dictionary containing field names as keys and lists of error 
+        messages as values.
+
+    Returns
+    -------
+    str
+        A string representation of all errors formatted as "field:error", 
+        separated by commas.
+    """
+    outputErrors = []
+    for field, errors in mainErrors.items():
+        for error in errors:
+            outputErrors.append(f"{field}:{error}")
+    return ';\n'.join(outputErrors)

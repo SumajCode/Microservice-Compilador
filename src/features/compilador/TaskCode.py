@@ -1,4 +1,4 @@
-from scripts.IdentifyCode import encontrarImports, encontrarFunciones, encontrarClases
+from scripts.IdentifyCode import encontrarImports, encontrarFunciones
 from scripts.CompareTo import compararArreglos, compararCodigo
 
 def identificarCodigoEnCodigo(code: str, restricciones: dict):
@@ -56,7 +56,7 @@ def identificarCodigoEnCodigo(code: str, restricciones: dict):
     #     clases = [str(clase).lower().strip() for clase in restricciones['classes']['classNames']]
     #     restriccionesClases = [str(name).lower().strip() for name in restricciones['classes']['classesCode']]
     
-    importacionesCodigo = [importacion for importacion in encontrarImports(code)]
+    importacionesCodigo = encontrarImports(code)
     nombreFuncionesCodigo = funcionesCodigo['functionNames']
     # nombreClasesCodigo = clasesCodigo['classNames']
 

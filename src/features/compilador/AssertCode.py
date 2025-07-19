@@ -17,22 +17,18 @@ class AssertCode(Compilador):
     @accederMemoria()
     def Evaluar(self, codigo: str, **kwargs):
         """
-        Evalua el codigo segun las entradas y salidas definidas en el diccionario de datos.
-        
-        El metodo evalua el codigo segun las entradas y salidas definidas en el diccionario de datos.
-        Si el lenguaje es python, se utiliza el compilador de python, si no es asi, se utiliza el 
-        compilador del lenguaje especificado.
-        
-        Parameters
-        ----------
-        datos : dict
-            Diccionario que contiene el codigo a evaluar, el lenguaje y las entradas y salidas.
-        
-        Returns
-        -------
-        dict
-            El objeto de compilacion con los resultados de la evaluacion.
+        Evalua el codigo segun el lenguaje y la entrada de datos.
+
+        El metodo evalua el codigo segun el lenguaje y la entrada de datos.
+        Si el lenguaje es python, se utiliza el compilador de python,
+        si no es asi, se utiliza el compilador del lenguaje especificado.
+
+        codigo: El codigo a evaluar.
+        kwargs: Diccionario que contiene el lenguaje y las entradas y salidas.
+
+        return: El objeto de compilacion.
         """
+
         if self.todoDelCodigio:
             self.code = agregarCodigo(codigo, self.input, self.todoDelCodigio, self.functionInvoke)
             self.output = kwargs.get('output')

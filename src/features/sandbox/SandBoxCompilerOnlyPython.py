@@ -1,12 +1,8 @@
-import subprocess
-from domain.errors.WarningsCode import *
 from features.compilador.TimeExecute import tiempoEjecucion
 from features.compilador.MemoryAccess import accederMemoria
 from features.compilador.GetOutputCode import salidaCodigo
 from features.compilador.AssertCode import AssertCode
 from features.compilador.TaskCode import identificarCodigoEnCodigo
-# from compilador.DebbuggerCode import 
-# from compilador.MemoryStructure import 
 
 class SandBox(AssertCode):
     def __init__(self, lenguaje: str):
@@ -18,42 +14,45 @@ class SandBox(AssertCode):
     @accederMemoria()
     def compilar(self, datos):
         """
-        Compila el codigo segun el lenguaje y la entrada de datos.
+        Compila el c digo seg n el lenguaje.
 
-        Si el lenguaje es python, se utiliza el compilador de python,
-        si no es asi, se utiliza el compilador del lenguaje especificado.
+        El m todo compila el c digo seg n el lenguaje,
+        si el lenguaje es python, se utiliza el compilador de python,
+        si no es as , se utiliza el compilador del lenguaje especificado.
 
-        :param datos: Diccionario que contiene el codigo a compilar,
-                      el lenguaje y las entradas y salidas.
+        Parameters
+        ----------
+        datos : dict
+            Diccionario que contiene el c digo a compilar y el lenguaje.
 
-        :return: El objeto de compilacion.
+        Returns
+        -------
+        Compilador
+            El objeto de compilaci n con los resultados de la compilaci n.
         """
         if 'lang' in datos.keys() and 'code' in datos.keys():
             self.code = datos['code']
             if self.lenguaje == 'python':
                 super().Compilar()
-            elif isinstance(datos['code'], __file__):
-                subprocess.Popen([])
         return self
 
     def evaluar(self, datos: dict):
         if 'lang' in datos.keys() and 'code' in datos.keys():
             results = []
-            self.entradas = datos['inputs']
-            self.salidas = datos['outputs']
+            entradas = datos['inputs']
+            salidas = datos['outputs']
             self.functionInvoke = datos['functionInvoke']
 
             self.todoDelCodigio = identificarCodigoEnCodigo(datos['code'], datos['rules'])
             if isinstance(self.todoDelCodigio, tuple):
                 self.salida['result'] = f"{self.todoDelCodigio[0]}:\n{self.todoDelCodigio[1]}"
                 return None
-            
+
             if self.lenguaje == 'python':
-                if len(self.entradas) == len(self.salidas):
-                    for i in range(len(self.entradas)):
-                        self.input = self.entradas[i]
-                        self.output = self.salidas[i]
-                        super().Evaluar(datos['code'], output=self.output)
+                if len(entradas) == len(salidas):
+                    for i in enumerate(len(entradas)):
+                        self.input = entradas[i]
+                        super().Evaluar(datos['code'], output=salidas[i])
                         results.append(self.salida)
                         self.salida = {
                             'result':None,
@@ -62,6 +61,4 @@ class SandBox(AssertCode):
                         }
                     self.salida = results
                     return self.salida
-            elif isinstance(datos['code'], __file__):
-                subprocess.Popen([])
         return self

@@ -4,10 +4,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class BaseConf():
-    def getBoolEnv(var_name, default=False):
-        val = os.getenv(var_name, str(default))
+    @staticmethod
+    def getBoolEnv(varName, default=False):
+        val = os.getenv(str(varName), str(default))
         return val.lower() in ('true', '1', 't', 'yes', 'y')
-    
+
     APP_NAME = os.getenv("APP_NAME")
     APP_VERSION = os.getenv("APP_VERSION")
     HOST = os.getenv("HOST")
@@ -17,12 +18,12 @@ class BaseConf():
     TESTING = getBoolEnv("TESTING")
     ENV_DEV = getBoolEnv("ENV_DEV")
 
-    MONGODB_USER = os.getenv("MONGODB_USER")
-    MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
-    MONGODB_HOST = os.getenv("MONGODB_HOST")
-    MONGODB_PORT = os.getenv("MONGODB_PORT")
-    MONGODB_DB = os.getenv("MONGODB_DB")
-    MONGODB_ACTIVE = getBoolEnv("MONGODB_ACTIVE")
+    # MONGODB_USER = os.getenv("MONGODB_USER")
+    # MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
+    # MONGODB_HOST = os.getenv("MONGODB_HOST")
+    # MONGODB_PORT = os.getenv("MONGODB_PORT")
+    # MONGODB_DB = os.getenv("MONGODB_DB")
+    # MONGODB_ACTIVE = getBoolEnv("MONGODB_ACTIVE")
 
     # SMTP_HOST = os.getenv("SMTP_HOST")
     # SMTP_PORT = os.getenv("SMTP_PORT")
@@ -36,13 +37,13 @@ class BaseConf():
     # CODE_COMPILATOR_CLIENT_ID = os.getenv("CODE_COMPILATOR_CLIENT_ID")
     # CODE_COMPILATOR_CLIENT_SECRET = os.getenv("CODE_COMPILATOR_CLIENT_SECRET")
 
-    CODE_IA_API_KEY = os.getenv("CODE_IA_API_KEY")
-    CODE_IA_CLIENT_ID = os.getenv("CODE_IA_CLIENT_ID")
-    CODE_IA_CLIENT_SECRET = os.getenv("CODE_IA_CLIENT_SECRET")
+    # CODE_IA_API_KEY = os.getenv("CODE_IA_API_KEY")
+    # CODE_IA_CLIENT_ID = os.getenv("CODE_IA_CLIENT_ID")
+    # CODE_IA_CLIENT_SECRET = os.getenv("CODE_IA_CLIENT_SECRET")
 
-    PUBLISHER_URL = os.getenv("PUBLISHER_URL") # En aca va el url de la api para guardar codigo
-    PUBLISHER_USER = os.getenv("PUBLISHER_USER")
-    PUBLISHER_PASSWORD = os.getenv("PUBLISHER_PASSWORD")
+    # PUBLISHER_URL = os.getenv("PUBLISHER_URL") # En aca va el url de la api para guardar codigo
+    # PUBLISHER_USER = os.getenv("PUBLISHER_USER")
+    # PUBLISHER_PASSWORD = os.getenv("PUBLISHER_PASSWORD")
 
 class DevConf(BaseConf):
     pass
@@ -50,4 +51,3 @@ class DevConf(BaseConf):
 class ProdConf(BaseConf):
     DEBUG = os.getenv("DEBUG")
     TESTING = os.getenv("TESTING")
-    pass
