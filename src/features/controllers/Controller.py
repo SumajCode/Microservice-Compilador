@@ -26,7 +26,7 @@ class Controller:
         """
         return jsonify({
             'data': datos['data'],
-            'message' : datos['message'],
-            'status' : datos['status'],
-            'code':datos['code']
+            'message': datos['message'],
+            'status': datos['status'],
+            'code': datos['code']
         })

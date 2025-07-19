@@ -58,7 +58,7 @@ class AssetController(Controller):
         except ValueError as e:
             return self.response({
                 'data': [],
-                'message' : f"Hubo un error con los datos: {e}.",
+                'message' : f"Hubo un error del servidor: {e}.",
                 'status' : 'Error',
-                'code':200
+                'code':500
             })
