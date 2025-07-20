@@ -4,13 +4,14 @@ from flask_restx import Namespace, Resource, fields
 from infra.controllers.CodeController import CodeController
 from infra.controllers.AssetController import AssetController
 
-api = Namespace('code', 'Code')
+ns = Namespace('code', description='Performance code for execution.')
 
 compilador = CodeController()
 asset = AssetController()
 
-@api.route('/compilar', methods=['POST'])
+@ns.route('/compilar', methods=['POST'])
 class CodeCompile(Resource):
+    @ns.response(200, 'Success')
     def compilarCodigo(self):
         """
         Compila el c digo seg n el lenguaje y la entrada de datos.
@@ -32,7 +33,7 @@ class CodeCompile(Resource):
         """
         return compilador.compilar(request)
 
-@api.route('/evaluar', methods=['POST'])
+@ns.route('/evaluar', methods=['POST'])
 class CodeAsset(Resource):
     def evaluarCodigo(self):
         """

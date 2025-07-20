@@ -6,6 +6,7 @@ env/
 # Archivos de configuración locales
 .env
 *.env
+.flaskenv
 
 # Archivos de caché
 __pycache__/
