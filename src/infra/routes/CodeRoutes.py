@@ -1,63 +1,72 @@
-from flask import Blueprint, request
+from flask import request
 from flask_restx import Namespace, Resource, fields
 
 from infra.controllers.CodeController import CodeController
 from infra.controllers.AssetController import AssetController
 
 ns = Namespace('code', description='Performance code for execution.')
+fields_code = ns.model('code', {
+    'inputs': fields.List(fields.String),
+})
 
 compilador = CodeController()
 asset = AssetController()
 
-@ns.route('/compilar', methods=['POST'])
+@ns.route('/compilar')
+@ns.doc(params={'code': 'The code to be compiled.', 'lang': 'The language of the code.'})
 class CodeCompile(Resource):
-    @ns.response(200, 'Success')
-    def compilarCodigo(self):
+    @ns.response(200,'Congratulations.')
+    @ns.response(500,'Try again.')
+    @ns.doc(responses={200:'Congratulations.', 400:'No wrongs try again.'})
+    def post(self):
         """
-        Compila el c digo seg n el lenguaje y la entrada de datos.
-
-        Recibe una solicitud HTTP con los datos necesarios para la compilaci n,
-        incluyendo el c digo, el lenguaje de programaci n y las entradas y salidas
-        esperadas. El m todo configura el lenguaje y las entradas/salidas en el
-        objeto compilador y luego llama al m todo `compilar` de compilador para
-        realizar la compilaci n del c digo. Si el resultado no contiene errores,
-        devuelve una respuesta indicando xito; de lo contrario, devuelve un
-        mensaje de error.
-
-        Returns
-        -------
-        Response
-            Un objeto de respuesta que contiene el resultado de la compilaci n
-            del c digo, un mensaje de xito o error, el estado y el c digo de
-            respuesta.
-        """
-        return compilador.compilar(request)
-
-@ns.route('/evaluar', methods=['POST'])
-class CodeAsset(Resource):
-    def evaluarCodigo(self):
-        """
-        Evalua el c digo seg n las entradas y salidas proporcionadas.
-
-        Recibe una solicitud HTTP con los datos necesarios para la evaluaci n,
-        incluyendo el c digo, el lenguaje de programaci n y las entradas y salidas
-        esperadas. El m todo configura el lenguaje y las entradas/salidas en el
-        objeto sandbox y luego llama al m todo `evaluar` de sandbox para
-        realizar la evaluaci n del c digo. Si el resultado no contiene errores,
-        devuelve una respuesta indicando xito; de lo contrario, devuelve un
-        mensaje de error.
+        Compiles the given code for the given language.
 
         Parameters
         ----------
-        request : Request
-            La solicitud HTTP que contiene los datos necesarios para la evaluaci n,
-            incluyendo el c digo, el lenguaje de programaci n y las entradas y salidas
-            esperadas.
+        code : str
+            The code to be compiled.
+        lang : str
+            The language of the code.
 
         Returns
         -------
         Response
-            Un objeto de respuesta que contiene el resultado de la evaluaci n del
-            c digo, un mensaje de xito o error, el estado y el c digo de respuesta.
+            A response of the compilation of the code.
+        """
+        return compilador.compilar(request)
+
+@ns.route('/evaluar')
+@ns.doc(params={
+    'code': 'The code to be compiled.',
+    'lang': 'The language of the code.',
+    'inputs': 'The inputs of the code.',
+    'outputs': 'The outputs of the code.',
+    'rules': 'The rules of the code.'})
+class CodeAsset(Resource):
+    @ns.doc(responses={200:'Congratulations.', 400:'No wrongs try again.'})
+    @ns.expect(fields_code)
+    @ns.marshal_with(fields_code)
+    def post(self):
+        """
+        Evaluate the given code for the given language and inputs.
+
+        Parameters
+        ----------
+        ``code`` : __str__
+            The code to be evaluated.
+        lang : str
+            The language of the code.
+        inputs : list
+            The inputs of the code.
+        outputs : list
+            The outputs of the code.
+        rules : list
+            The rules of the code.
+
+        Returns
+        -------
+        Response
+            A response of the evaluation of the code.
         """
         return asset.evaluar(request)

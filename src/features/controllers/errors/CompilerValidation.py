@@ -40,12 +40,12 @@ class CodeForm(FlaskForm):
             Si el lenguaje no es permitido o el campo est  vac o o tiene
             espacios en blanco.
         """
+        if not field.data or field.data.strip() == '':
+            raise ValidationError('Lang is with space, this input is required.')
         langPermited = ['python', 'c++', 'c#', 'java']
         # , 'rust', 'javascript', 'php', 'bash', 'go', 'kotlin', 'typescript', 'swift'
         if field.data not in langPermited:
-            raise ValidationError('Language not permited in this compiolator.')
-        if not field.data or field.data.strip() == '':
-            raise ValidationError('Lang is with space, this input is required.')
+            raise ValidationError('Language not permited in this compilator.')
 
     code = StringField('code', validators=[validateCode])
     lang = StringField('lang', validators=[validateLang])
