@@ -1,23 +1,20 @@
 from flask import request
-from flask_restx import Namespace, Resource, fields
 
 from infra.controllers.CodeController import CodeController
 from infra.controllers.AssetController import AssetController
+from features.routes.NamespaceCode import NamespaceCode
 
-ns = Namespace('code', description='Performance code for execution.')
-fields_code = ns.model('code', {
-    'inputs': fields.List(fields.String),
-})
+ns = NamespaceCode(name='code', description='Performance code for execution.', path='/code')
 
 compilador = CodeController()
 asset = AssetController()
 
 @ns.route('/compilar')
-@ns.doc(params={'code': 'The code to be compiled.', 'lang': 'The language of the code.'})
-class CodeCompile(Resource):
+# @ns.doc(params={'code': 'The code to be compiled.', 'lang': 'The language of the code.'})
+class CodeCompile(ns.resource):
     @ns.response(200,'Congratulations.')
-    @ns.response(500,'Try again.')
-    @ns.doc(responses={200:'Congratulations.', 400:'No wrongs try again.'})
+    @ns.response(500,'No wrongs try again.')
+    @ns.expect(ns.fieldsCompiler, validate=True)
     def post(self):
         """
         Compiles the given code for the given language.
@@ -37,31 +34,31 @@ class CodeCompile(Resource):
         return compilador.compilar(request)
 
 @ns.route('/evaluar')
-@ns.doc(params={
-    'code': 'The code to be compiled.',
-    'lang': 'The language of the code.',
-    'inputs': 'The inputs of the code.',
-    'outputs': 'The outputs of the code.',
-    'rules': 'The rules of the code.'})
-class CodeAsset(Resource):
+# @ns.doc(params={
+#     'code': 'The code to be compiled.',
+#     'lang': 'The language of the code.',
+#     'inputs': 'The inputs of the code.',
+#     'outputs': 'The outputs of the code.',
+#     'rules': 'The rules of the code.'})
+class CodeAsset(ns.resource):
     @ns.doc(responses={200:'Congratulations.', 400:'No wrongs try again.'})
-    @ns.expect(fields_code)
-    @ns.marshal_with(fields_code)
+    @ns.expect(ns.fieldsAsset, validate=True)
+    @ns.marshal_with(ns.fieldsAsset)
     def post(self):
         """
         Evaluate the given code for the given language and inputs.
 
         Parameters
         ----------
-        ``code`` : __str__
+        ``code`` : *__str__*
             The code to be evaluated.
-        lang : str
+        `lang` : str
             The language of the code.
-        inputs : list
+        `inputs` : list
             The inputs of the code.
-        outputs : list
+        `outputs` : list
             The outputs of the code.
-        rules : list
+        `rules` : list
             The rules of the code.
 
         Returns

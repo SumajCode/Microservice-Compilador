@@ -7,29 +7,17 @@ from features.compilador.TaskCode import identificarCodigoEnCodigo
 class SandBox(AssertCode):
     def __init__(self, lenguaje: str):
         self.lenguaje = lenguaje
+        self.code = ''
+        self.salida = {}
+        self.input = None
+        self.todoDelCodigio = None
+        self.functionInvoke = None
         super().__init__()
 
     @salidaCodigo()
     @tiempoEjecucion()
     @accederMemoria()
     def compilar(self, datos):
-        """
-        Compila el c digo seg n el lenguaje.
-
-        El m todo compila el c digo seg n el lenguaje,
-        si el lenguaje es python, se utiliza el compilador de python,
-        si no es as , se utiliza el compilador del lenguaje especificado.
-
-        Parameters
-        ----------
-        datos : dict
-            Diccionario que contiene el c digo a compilar y el lenguaje.
-
-        Returns
-        -------
-        Compilador
-            El objeto de compilaci n con los resultados de la compilaci n.
-        """
         if 'lang' in datos.keys() and 'code' in datos.keys():
             self.code = datos['code']
             if self.lenguaje == 'python':

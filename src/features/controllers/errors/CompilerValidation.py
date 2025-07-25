@@ -5,41 +5,47 @@ from wtforms.validators import ValidationError
 class CodeForm(FlaskForm):
     def validateCode(self, field):
         """
-        Validador para el c digo a compilar.
-        
-        Verifica si el c digo est  vac o o tiene espacios en blanco.
-        
+        Validates the code input.
+
+        The code input is required to compile a program. This method
+        checks if the input is empty or contains only whitespace characters.
+        If either condition is true, a ValidationError is raised with an
+        appropriate error message.
+
         Parameters
         ----------
         field : str
-            El campo que se va a validar.
-        
+            The code input to validate.
+
         Raises
         ------
         ValidationError
-            Si el c digo est  vac o o tiene espacios en blanco.
+            If the code input is empty or contains only whitespace characters.
         """
         if not field.data or field.data.strip() == '':
             raise ValidationError('Code is with space, this input is required.')
 
     def validateLang(self, field):
         """
-        Validador para el lenguaje de programaci n que se va a utilizar.
-        
-        Verifica si el lenguaje es permitido en este compilador y si el campo
-        est  vac o tiene espacios en blanco.
-        
+        Validates the language input.
+
+        The language input is required to specify the programming language
+        for compilation. This method checks if the input is empty or contains
+        only whitespace characters. It also verifies whether the input
+        language is permitted by the compiler. If any of these conditions are
+        not met, a ValidationError is raised with an appropriate error message.
+
         Parameters
         ----------
         field : str
-            El campo que se va a validar.
-        
+            The language input to validate.
+
         Raises
         ------
         ValidationError
-            Si el lenguaje no es permitido o el campo est  vac o o tiene
-            espacios en blanco.
+            If the language input is empty or not permitted by the compiler.
         """
+
         if not field.data or field.data.strip() == '':
             raise ValidationError('Lang is with space, this input is required.')
         langPermited = ['python', 'c++', 'c#', 'java']

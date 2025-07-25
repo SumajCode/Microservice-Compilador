@@ -9,29 +9,6 @@ class AssetController(Controller):
         self.sandbox = SandBox(None)
 
     def evaluar(self, request):
-        """
-        Evalúa el código recibido en la solicitud según las entradas y salidas
-        proporcionadas.
-
-        El método configura el lenguaje y las entradas/salidas en el objeto
-        sandbox y luego llama al método `evaluar` de sandbox para realizar la
-        evaluación del código. Si el resultado no contiene errores, devuelve
-        una respuesta indicando éxito; de lo contrario, devuelve un mensaje
-        de error.
-
-        Parameters
-        ----------
-        request : Request
-            La solicitud HTTP que contiene los datos necesarios para la evaluación,
-            incluyendo el código, el lenguaje de programación, las entradas y las
-            salidas esperadas.
-
-        Returns
-        -------
-        Response
-            Un objeto de respuesta que contiene el resultado de la evaluación del
-            código, un mensaje de éxito o error, el estado y el código de respuesta.
-        """
         form = AssetForm(meta={'csrf':False})
         if not form.validate_on_submit():
             return self.response({
@@ -40,8 +17,7 @@ class AssetController(Controller):
                 'status' : 'Error',
                 'code':200
             })
-
-        datos =  self.obtenerRequest(request)
+        datos = self.obtenerRequest(request)
         try:
             self.sandbox.lenguaje = datos['lang']
             self.sandbox.salidas = datos['outputs']

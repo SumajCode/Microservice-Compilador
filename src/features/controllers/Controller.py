@@ -3,26 +3,26 @@ class Controller:
     def __init__(self):
         pass
 
-    def obtenerRequest(self, request):
-        """
-        Obtiene los datos del request en formato dict.
-        
-        request (Request): El request que contiene los datos a obtener.
-        
-        Return:
-            dict: Un diccionario con los datos del request.
-        """
+    def obtenerRequest(self, request):        
         return request.get_json() if request.is_json else request.form
 
     def response(self, datos):
         """
-        Construye una respuesta HTTP con los datos dados.
-        
-        datos (dict): Diccionario que contiene la informacion para la respuesta.
-            Debe tener las claves 'data', 'message', 'status' y 'code'.
-        
-        Return:
-            Response: Un objeto de respuesta HTTP con los datos dados.
+        Constructs a JSON response object from the provided data dictionary.
+
+        Parameters
+        ----------
+        datos : dict
+            A dictionary containing the following keys:
+            - 'data': The response data to be included in the JSON.
+            - 'message': A message string describing the response status.
+            - 'status': A status string indicating the result of the operation.
+            - 'code': An HTTP status code for the response.
+
+        Returns
+        -------
+        Response
+            A Flask response object with the specified JSON structure.
         """
         return jsonify({
             'data': datos['data'],
