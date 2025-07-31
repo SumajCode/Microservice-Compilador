@@ -17,6 +17,26 @@ class AssertCode(Compilador):
     @tiempoEjecucion()
     @accederMemoria()
     def Evaluar(self, codigo: str, **kwargs):
+        """
+        Evaluates and compiles the given code with specified input and output.
+
+        This method evaluates the provided code by augmenting it with additional
+        code structures and inputs, then compiles it while measuring execution time
+        and memory usage. It also compares the actual output with the expected output.
+
+        Parameters
+        ----------
+        codigo : str
+            The code to be evaluated and compiled.
+        **kwargs : dict
+            Additional keyword arguments, including:
+            - 'output': The expected output to compare with the actual result.
+
+        Returns
+        -------
+        self
+            The instance with updated compilation results.
+        """
         if self.todoDelCodigio:
             self.code = agregarCodigo(codigo, self.input, self.todoDelCodigio, self.functionInvoke)
             self.output = kwargs.get('output')

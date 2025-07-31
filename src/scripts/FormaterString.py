@@ -1,4 +1,24 @@
 def agregarCodigo(code: str, param, opciones: dict, functionInvoke: str):
+    """
+    Agrega el parametro y la funcion a invocar al final del codigo
+    para que se pueda ejecutar y obtener el resultado de la funcion
+    
+    Parameters
+    ----------
+    code : str
+        El codigo a ejecutar
+    param : str
+        El parametro a pasar a la funcion
+    opciones : dict
+        Diccionario con las opciones de configuracion, con las claves 'clases' y 'funciones'
+    functionInvoke : str
+        El nombre de la funcion a invocar
+    
+    Returns
+    -------
+    str
+        El codigo con el parametro y la funcion a invocar agregados al final
+    """
     parametro = formatoParametro(param)
     nuevoCodigo = code
     # clases = [clase.lower() for clase in opciones['clases']]
@@ -21,6 +41,17 @@ def eliminarEspaciosLower(arreglo: list):
     return [item.replace(' ', '').lower() for item in arreglo]
 
 def formatoParametro(param):
+    """
+    Formats a parameter into a suitable type for the interpreter.
+
+    It takes a parameter of any type and returns it formatted as a dict, list, int, str or None.
+
+    Args:
+        param (Any): The parameter to be formatted.
+
+    Returns:
+        Any: The formatted parameter.
+    """
     if isinstance(param, dict):
         return dict(param)
     if isinstance(param, list):

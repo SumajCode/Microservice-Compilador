@@ -12,18 +12,17 @@ asset = AssetController()
 @ns.route('/compilar')
 # @ns.doc(params={'code': 'The code to be compiled.', 'lang': 'The language of the code.'})
 class CodeCompile(ns.resource):
-    @ns.response(200,'Congratulations.')
-    @ns.response(500,'No wrongs try again.')
-    @ns.expect(ns.fieldsCompiler, validate=True)
+    @ns.doc(responses={200: 'Congratulations.', 500: 'No wrongs try again.'})
+    @ns.expect(ns.fieldsCompiler())
     def post(self):
         """
         Compiles the given code for the given language.
 
         Parameters
         ----------
-        code : str
-            The code to be compiled.
-        lang : str
+        `code` : *__str__*
+            The code to be evaluated.
+        `lang` : *__str__*
             The language of the code.
 
         Returns
@@ -34,23 +33,17 @@ class CodeCompile(ns.resource):
         return compilador.compilar(request)
 
 @ns.route('/evaluar')
-# @ns.doc(params={
-#     'code': 'The code to be compiled.',
-#     'lang': 'The language of the code.',
-#     'inputs': 'The inputs of the code.',
-#     'outputs': 'The outputs of the code.',
-#     'rules': 'The rules of the code.'})
 class CodeAsset(ns.resource):
     @ns.doc(responses={200:'Congratulations.', 400:'No wrongs try again.'})
-    @ns.expect(ns.fieldsAsset, validate=True)
-    @ns.marshal_with(ns.fieldsAsset)
+    @ns.expect(ns.fieldsAssert())
+    # @ns.marshal_with(ns.fieldsAsset)
     def post(self):
         """
         Evaluate the given code for the given language and inputs.
 
         Parameters
         ----------
-        ``code`` : *__str__*
+        `code` : *__str__*
             The code to be evaluated.
         `lang` : str
             The language of the code.

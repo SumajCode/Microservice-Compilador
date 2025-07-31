@@ -1,99 +1,77 @@
-from scripts.IdentifyCode import encontrarImports, encontrarFunciones
-from scripts.CompareTo import compararArreglos, compararCodigo
+from scripts.IdentifyCode import importsFound, functionsFound
+from scripts.CompareTo import arraysCompareTo, codeCompareTo
 
-def identificarCodigoEnCodigo(code: str, restricciones: dict):
-    """
-    Identifica las importaciones, funciones y clases en el codigo y compara
-    con las restricciones para ver si cumple con las mismas.
-
-    Parameters
-    ----------
-    code : str
-        El codigo a analizar.
-
-    restricciones : dict
-        Las restricciones a comparar.
-            - 'imports': lista de importaciones no permitidas.
-            - 'functions': dict con las funciones no permitidas.
-                - 'functionNames': lista de nombres de funciones no permitidas.
-                - 'functionsCode': lista de codigo de las funciones no permitidas.
-            - 'classes': dict con las clases no permitidas.
-                - 'classNames': lista de nombres de clases no permitidas.
-                - 'classesCode': lista de codigo de las clases no permitidas.
-
-    Returns
-    -------
-    dict
-        Un diccionario con los mensajes de error.
-            - 'clases': str
-                El mensaje de error de las clases.
-            - 'funciones': str
-                El mensaje de error de las funciones.
-    """
+def identifyCodeInCode(code: str, rules: dict) -> tuple:
     code = code.lower()
-    funcionesCodigo = encontrarFunciones(code)
+    codeFunctions = functionsFound(code)
     # clasesCodigo = encontrarClases(code)
 
-    importaciones = None
+    imports = None
     # clases = None
-    funciones = None
+    functions = None
 
     # restriccionesClases = None
-    restriccionesFunciones = None
+    restrictionsFunctions = None
 
-    keys = restricciones.keys()
+    keys = rules.keys()
 
-    if 'imports' in keys and restricciones['imports']:
-        importaciones = [str(importacion).lower().strip() for importacion in restricciones['imports']]
+    if 'imports' in keys and rules['imports']:
+        imports = [str(importation).lower().strip() for importation in rules['imports']]
     if 'functions' in keys:
-        functionsRules = restricciones['functions']
+        functionsRules = rules['functions']
         keysFuncitons = functionsRules.keys()
         if 'functionNames' in keysFuncitons and functionsRules['functionNames'] is not None:
-            funciones = [str(funcion).lower().strip() for funcion in restricciones['functions']['functionNames']]
+            functions = [str(funcion).lower().strip() for funcion in rules['functions']['functionNames']]
         if 'functionCodes' in keysFuncitons and functionsRules['functionCodes'] is not None:
-            restriccionesFunciones = [str(name).lower().strip() for name in restricciones['functions']['functionsCode']]
-    # if 'classes' in keys and restricciones['classes']['classNames'] and restricciones['classes']['classesCode']:
-    #     clases = [str(clase).lower().strip() for clase in restricciones['classes']['classNames']]
-    #     restriccionesClases = [str(name).lower().strip() for name in restricciones['classes']['classesCode']]
+            restrictionsFunctions = [str(name).lower().strip() for name in rules['functions']['functionsCode']]
+    # if 'classes' in keys and rules['classes']['classNames'] and rules['classes']['classesCode']:
+    #     clases = [str(clase).lower().strip() for clase in rules['classes']['classNames']]
+    #     restriccionesClases = [str(name).lower().strip() for name in rules['classes']['classesCode']]
     
-    importacionesCodigo = encontrarImports(code)
-    nombreFuncionesCodigo = funcionesCodigo['functionNames']
+    importsCode = importsFound(code)
+    nameFunctionsCode = codeFunctions['functionNames']
     # nombreClasesCodigo = clasesCodigo['classNames']
 
-    compararImportaciones, importacion = compararArreglos(
-        importacionesCodigo if len(importacionesCodigo) > 0 else None,
-        importaciones
+    importsCompareTo, importation = arraysCompareTo(
+        importsCode if len(importsCode) > 0 else None,
+        imports
     )
     
-    # compararClases, mensajeClases = compararCodigo(
+    # compararClases, mensajeClases = codeCompareTo(
     #     nombreClasesCodigo if len(nombreClasesCodigo) > 0 else None,
     #     clases
     # )
     
-    compararFunciones, mensajeFunciones = compararCodigo(
-        nombreFuncionesCodigo if len(nombreFuncionesCodigo) > 0 else None,
-        funciones
+    functionCompareTo, functionsMessage = codeCompareTo(
+        nameFunctionsCode if len(nameFunctionsCode) > 0 else None,
+        functions
     )
 
-    # cambioDeCodigoClases, clasesDeCodigo = compararCodigo(
+    # cambioDeCodigoClases, clasesDeCodigo = codeCompareTo(
     #     clasesCodigo['classes'],
     #     restriccionesClases
     # )
     
-    cambioDeCodigoFunciones, funcionesDeCodigo = compararCodigo(
-        funcionesCodigo['functions'],
-        restriccionesFunciones
+    switchFunctionsCode, functionsCode = codeCompareTo(
+        codeFunctions['functions'],
+        restrictionsFunctions
     )
     
-    if compararImportaciones:
-        return "Error tiene importaciones no permitidas.", importacion
-    if compararFunciones is False:
+    if importsCompareTo:
+        return "Error have imports not allowed.", importation
+    if functionCompareTo is False:
         # if cambioDeCodigoClases:
         #     return "Error cambio la clase obligatoria.", clasesDeCodigo
-        if cambioDeCodigoFunciones:
-            return "Error cambio la funcion obligatoria.", funcionesDeCodigo
+        if switchFunctionsCode:
+            return "Error function mandatory switched.", functionsCode
         return {
             # 'clases': mensajeClases,
-            'funciones': mensajeFunciones
+            'functions': functionsMessage
         }
     return None
+
+def indentifyFunctionExecute(word: str) -> list:
+    pass
+
+def identifyArgsForFunction():
+    pass

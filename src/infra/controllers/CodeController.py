@@ -1,5 +1,5 @@
 from features.sandbox.SandBoxCompilerOnlyPython import SandBox
-from features.controllers.errors.CompilerValidation import CodeForm
+from features.controllers.validations.CompilerValidation import CodeForm
 from features.controllers.Controller import Controller
 from scripts.FormaterString import formatErrorsValidate
 
@@ -10,6 +10,23 @@ class CodeController(Controller):
         self.sandbox = SandBox(None)
 
     def compilar(self, request):
+        """
+        Compiles the given code for the given language.
+
+        Parameters
+        ----------
+        request: dict
+            A dictionary containing the following keys:
+            - 'code': str
+                The code to be compiled.
+            - 'lang': str
+                The language of the code.
+
+        Returns
+        -------
+        Response
+            A response of the compilation of the code.
+        """
         form = CodeForm(meta={'csrf':False})
         if not form.validate_on_submit():
             return self.response({
